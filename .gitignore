@@ -1,4 +1,5 @@
 Data/
+/demo_outputs/
 .env
 .env.*
 !.env.example

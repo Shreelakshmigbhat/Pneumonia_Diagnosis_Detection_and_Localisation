@@ -1,0 +1,4 @@
+case,image_id,true_label,predicted_class,pneumonia_softmax_confidence,phase1_iou,phase2_iou,n_gt_boxes,n_pred_boxes_phase1,n_pred_boxes_phase2
+A_success,aa720b92-39d2-4db4-a6c1-318840cb973b,Lung Opacity,Pneumonia,0.9135133624076843,0.7735194339439759,0.7170526838085449,1,1,1
+B_partial,a5df1553-7c85-46e6-9e0b-870d67d23eb7,Lung Opacity,Healthy,0.3581607937812805,0.0012242433266330826,0.054689153479146886,1,1,1
+C_failure,77a4a76f-d348-4dd4-b22a-d7b676121d78,Lung Opacity,Pneumonia,0.8047611117362976,0.0,0.0,1,1,1

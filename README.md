@@ -85,6 +85,30 @@ The saved Stage 10 result records Python 3.14.4. The requirements file uses mini
 
 ## Running the Project
 
+### Quick Phase 1 + Phase 2 demo
+
+To run both localization methods on one Pneumonia-positive image from the
+existing fixed test split, using the saved epoch-9 CNN checkpoint, run:
+
+```powershell
+python main.py
+```
+
+The demo is inference-only: it does not retrain a model, regenerate the split,
+or run full-test evaluation. It saves the input X-ray, Phase 1 CAM overlay,
+Phase 2 Grad-CAM++ overlay, and a JSON summary under a new timestamped folder
+in `demo_outputs/`. You can run one phase at a time or choose a test image:
+
+```powershell
+python main.py --phase phase1
+python main.py --phase phase2
+python main.py --phase both --image-id 0087bd3a-55a7-4045-b111-b018fa52d361
+```
+
+The selected image ID must be Pneumonia-positive and assigned to the existing
+test split. Green boxes show ground truth; orange boxes show model predictions.
+This is an educational visualization, not a clinical diagnosis.
+
 The following commands correspond to existing scripts. Dataset creation and training commands can overwrite outputs or take substantial time. **Do not run them just to review the committed/saved results.** In particular, do not recreate the split when reproducing metrics against the saved artifacts.
 
 ```powershell
