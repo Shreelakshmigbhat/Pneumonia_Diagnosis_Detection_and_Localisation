@@ -189,22 +189,55 @@ def _evaluate_predictions(
     return accuracy, all_labels, all_predictions
 
 
+
 def _confusion_metrics(
     labels: list[int], predictions: list[int]
 ) -> dict[str, Any]:
-    tn = sum(actual == 0 and predicted == 0 for actual, predicted in zip(labels, predictions))
-    fp = sum(actual == 0 and predicted == 1 for actual, predicted in zip(labels, predictions))
-    fn = sum(actual == 1 and predicted == 0 for actual, predicted in zip(labels, predictions))
-    tp = sum(actual == 1 and predicted == 1 for actual, predicted in zip(labels, predictions))
+    if len(labels) != len(predictions):
+        raise ValueError("Labels and predictions must have equal lengths")
+    if not labels:
+        raise ValueError("Cannot evaluate an empty set of predictions")
+
+    tn = sum(
+        actual == 0 and predicted == 0
+        for actual, predicted in zip(labels, predictions)
+    )
+    fp = sum(
+        actual == 0 and predicted == 1
+        for actual, predicted in zip(labels, predictions)
+    )
+    fn = sum(
+        actual == 1 and predicted == 0
+        for actual, predicted in zip(labels, predictions)
+    )
+    tp = sum(
+        actual == 1 and predicted == 1
+        for actual, predicted in zip(labels, predictions)
+    )
+
+    sensitivity = tp / (tp + fn) if tp + fn else 0.0
+    specificity = tn / (tn + fp) if tn + fp else 0.0
+    precision = tp / (tp + fp) if tp + fp else 0.0
+    f1_score = (
+        2 * precision * sensitivity / (precision + sensitivity)
+        if precision + sensitivity
+        else 0.0
+    )
+    balanced_accuracy = (sensitivity + specificity) / 2
+
     return {
         "confusion_matrix": [[tn, fp], [fn, tp]],
-        "sensitivity": tp / (tp + fn) if tp + fn else 0.0,
-        "specificity": tn / (tn + fp) if tn + fp else 0.0,
+        "sensitivity": sensitivity,
+        "specificity": specificity,
+        "precision": precision,
+        "f1_score": f1_score,
+        "balanced_accuracy": balanced_accuracy,
         "true_negative": tn,
         "false_positive": fp,
         "false_negative": fn,
         "true_positive": tp,
     }
+
 
 
 def _baseline_comparison_guard(
